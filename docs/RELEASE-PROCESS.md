@@ -1,61 +1,46 @@
 # Produkcijsko izdanje 1.2
 
-Status: nacrt, javna objava nije odobrena. Repozitorij: Rez-Audio-Studio.
+Ova procedura zamjenjuje ranije upute o lokalnom nacrtu i automatskom generisanju lozinke. Stvarni status i otisci su u [FINAL-v1.2.md](FINAL-v1.2.md). Repozitorij, tag i postojeći GitHub Release već postoje; ne praviti duplikat.
 
-## Ključ i potpis
+## Trajni ključ
 
-Produkcijski ključ se ne generiše bez izričite potvrde vlasnika. Nakon potvrde ključ kreira vlasnik na pouzdanom računaru, izvan projekta i cloud-sinhroniziranih mapa. Primjer (keytool interaktivno traži lozinku):
+Aktivni novi produkcijski ključ: `$HOME/.local/share/rez-signing/rez-release-v1.2-maintained.p12`, alias `rez-release`. Stari `rez-release.p12` ima drugi certifikat i nepoznatu lozinku; ne prepisivati ga, ne brisati i ne pokušavati pogoditi lozinku.
+
+Direktorij ključa mora imati prava 700, keystore 600. Original i nezavisni backup novog keystorea na eksternom disku već su provjereni bajt po bajt, SHA-256 vrijednostima i identičnim izvezenim certifikatima. Backup postoji u namjenskom direktoriju `Rez-Signing-Backup`, pod nazivom `rez-release-v1.2-maintained.p12`. Ne čuvati jedinu kopiju lozinke uz backup ključa; vlasnik je čuva odvojeno.
+
+Lozinku postavlja i unosi vlasnik direktno kroz interaktivni keytool/apksigner upit. Nikada je ne slati u chat, kod, argumente, log, shell historiju, dokumentaciju ili environment datoteku. Ne koristiti raniji `create-production-key.sh`: njegova automatska lozinka/datoteka lozinke ne odgovara ovoj proceduri. Novi ključ je već kreiran; ne pokretati novu generaciju radi ponovnog builda.
+
+Ako ikada bude potreban drugi novi ključ, koristiti novi naziv koji ne postoji, RSA 3072, najmanje 25 godina i tačan DN `CN=Rez Audio Studio, O=Rez Audio Studio, C=BA`. Izvoz javnog certifikata iz originala i backupa mora dati identične DER datoteke. Promjena certifikata prekida običnu nadogradnju prethodnih instalacija i zahtijeva posebno razmatranje migracije.
+
+## Build i potpisivanje postojećim novim ključem
+
+Početi iz čistog provjerenog commita, uporediti main s origin/main i provjeriti tag. Pokrenuti `./scripts/test.sh`, lokalizacijsku i sigurnosnu provjeru izvora/source paketa. Podržani build je ručni, SDK 36 / Build Tools 36.0.0 / JDK 17. Gradle/lint nisu validirani.
 
 ```bash
-umask 077
-mkdir -p "$HOME/rez-signing"
-keytool -genkeypair -keystore "$HOME/rez-signing/rez-release.jks" -alias rez-release -keyalg RSA -keysize 3072 -validity 10000
-keytool -list -v -keystore "$HOME/rez-signing/rez-release.jks" -alias rez-release
-```
-
-Zabilježiti SHA-256 certifikata nezavisno od APK-a. Sačuvati šifriranu offline rezervnu kopiju ključa i lozinke odvojeno. Isti ključ treba za buduće nadogradnje. Ključ, lozinke i lokalne postavke nikad ne dodavati u Git ni release priloge.
-
-```bash
-export REZ_RELEASE_KEYSTORE="$HOME/rez-signing/rez-release.jks"
+export REZ_RELEASE_KEYSTORE="$HOME/.local/share/rez-signing/rez-release-v1.2-maintained.p12"
 export REZ_RELEASE_ALIAS=rez-release
-export REZ_RELEASE_CERT_SHA256='<zabilježeni SHA-256 certifikata>'
-./scripts/test.sh
+export REZ_RELEASE_CERT_SHA256=8cfed1510ed9d1de649b04c8bc9d9f7347026a4db1ad5e8fe4364d370f8b7a70
+unset REZ_RELEASE_PASSWORD_FILE
 ./scripts/sign-release.sh
 ```
 
-Skripta gradi svjež nepotpisan APK, interaktivno traži lozinke, provjerava poravnanje, potpis i očekivani certifikat te odbija poznati razvojni identitet. Izlaz: `dist/Rez-Audio-Studio-v1.2.apk`, `.sha256` i izvještaj certifikata. Nikad ne koristiti `scripts/build.sh` razvojni APK kao javni prilog. Gradle release potpis nije konfigurisan; podržani postupak je navedena skripta s Build Tools 36.0.0 i SDK 36, JDK 17, zip i ripgrep.
+Skripta pravi svjež unsigned build, izvršava zipalign prije potpisivanja, traži lozinku interaktivno i provjerava certifikat, verziju i jezičke konfiguracije. Izlaz su `dist/Rez-Audio-Studio-v1.2.apk`, `.apk.sha256` i `-verification.txt`. Provjeriti apksigner i zipalign, package `rs.rez.audio`, verziju `1.2` / `3`, minSdk 29 i targetSdk 35. Sadržaj payload datoteka mora odgovarati unsigned buildu; pregledati sve APK unose i tajne. Development APK nikada nije produkcijski prilog. Stare .idsig datoteke iz ranijih buildova nisu odobreni prilozi.
 
-## Provjere i potvrda
+## Stvarni uređaj
 
-1. Apache-2.0 je odabrana i LICENSE je dodan. Vlasnik još potvrđuje nosioca prava i porijeklo koda/ikone. Binarne fixture datoteke se ne objavljuju. Provjeriti LICENSE, NOTICE i THIRD_PARTY_NOTICES.md u izvorima, APK assets i release prilozima.
-2. Završiti petojezičnu provjeru prema docs/REVIEW-1.2.md. Ponoviti `scripts/test.sh` i `scripts/test-device.sh` na dostupnom testnom Android 10+ uređaju. Device skripta instalira razvojni APK i testni APK; ne koristiti je preko produkcijske instalacije s drugim certifikatom.
-3. Produkcijski APK zasebno instalirati na čist testni profil/uređaj. Provjeriti uvoz biračem i dijeljenjem, talas, zum/pomjeranje, izbor, preslušavanje, izvoz, dijeljenje, preimenovanje i opcionalno zvono. Provjeriti nadogradnju s prethodnog izdanja potpisanog istim ključem ako postoji. Razvojna instalacija s drugim potpisom ne može se direktno nadograditi.
-4. Pregledati sadržaj source arhive i priloga, skenirati tajne i eventualnu Git historiju. `.gitignore` ne uklanja već praćene tajne. Ovdje historija nije dostupna.
-5. Priložiti SHA-256 APK-a i otisak certifikata završnom izvještaju. Tražiti izričitu potvrdu vlasnika za konačni APK, oznaku v1.2 i javni repozitorij Rez-Audio-Studio.
-6. Tek nakon potvrde napraviti javni repozitorij/push/tag/Release. U release idu isključivo produkcijski APK, checksum i javni certifikat/izvještaj; nikad keystore, build, testni ili razvojni APK.
+Instalirati tačan verificirani APK; nakon instalacije izvući `base.apk` i uporediti SHA-256. Prvo pokušati sigurnu nadogradnju. Ako potpis nije kompatibilan, objasniti gubitak privatnih podataka i tražiti izričito odobrenje prije deinstalacije. Ne koristiti `test-device.sh` preko produkcijske instalacije: instalira razvojni APK. Instrumentacijski testni APK za produkcijski paket mora imati kompatibilan potpis; trenutno nije izvršen.
 
-Gubitak ključa onemogućava uobičajenu nadogradnju direktno distribuiranih APK-ova. Bez ključa i stvarnog uređaja postupak je pripremljen, ali produkcijsko izdanje nije validirano.
+Na Xiaomi 12 vlasnik je odabrao vođeni ručni test bez promjene sigurnosnih postavki. Nakon svakog potvrđenog koraka pregledati UI, relevantni logcat, originalni zvuk i dostupne izvoze/hashove. Pokriti birač datoteka, waveform, zum/pomjeranje, izbor raspona, preview, rezanje, čuvanje, otvaranje i sistemski izbor dijeljenja. Ne slati fajl drugim osobama. Provjeriti tačan audio sadržaj izvoza i da original ostaje nepromijenjen. Provjeriti pet jezika koliko je dostupno i navesti ograničenja.
 
-## Odobrena priprema produkcijskog identiteta
+## Odobrenje i postojeći GitHub Release
 
-Vlasnik je odobrio generisanje novog ključa s identitetom `CN=Rez Audio Studio, O=Rez Audio Studio, C=BA`. Koristiti dvije namjenske prazne trajne mape izvan projekta; backup treba biti na drugom mediju. Sandbox ove sesije dopušta pisanje izvan projekta samo u privremenu mapu, pa generisanje tu nije izvršeno.
+Dokumentaciju uskladiti sa stvarnim rezultatima, commitovati i pushovati na main. Ne pomjerati objavljeni tag bez jasnog izvještaja i opravdanja; za ovaj kandidat postojeći v1.2 tag ima identične izvore aplikacije i build ulaze.
 
-Pokrenuti lokalno, s vlastitim trajnim lokacijama:
+Prije javne zamjene tražiti završnu potvrdu vlasnika za konkretni APK i SHA-256. Release do tada ostaje draft, sa sačuvanim starim assetom. Nakon potvrde ažurirati isti Release, zamijeniti stari APK i postaviti samo:
 
-```bash
-export REZ_KEY_DIRECTORY="$HOME/.local/share/rez-signing"
-# Postaviti stvarnu namjensku mapu na zasebnom trajnom backup mediju.
-: "${REZ_BACKUP_DIRECTORY:?Postavi mapu rezervne kopije na zasebnom mediju}"
-./scripts/create-production-key.sh "$REZ_KEY_DIRECTORY" "$REZ_BACKUP_DIRECTORY"
-export REZ_RELEASE_KEYSTORE="$REZ_KEY_DIRECTORY/rez-release.p12"
-export REZ_RELEASE_ALIAS=rez-release
-export REZ_RELEASE_PASSWORD_FILE="$REZ_KEY_DIRECTORY/store-password.txt"
-export REZ_RELEASE_CERT_SHA256="$(cat "$REZ_KEY_DIRECTORY/certificate-sha256.txt")"
-./scripts/sign-release.sh
-```
+- `Rez-Audio-Studio-v1.2.apk`
+- `Rez-Audio-Studio-v1.2.apk.sha256`
+- `Rez-Audio-Studio-v1.2-verification.txt`
+- `LICENSE`, `NOTICE`, `THIRD_PARTY_NOTICES.md`
 
-Skripta generiše 48 nasumičnih bajtova lozinke, čuva ih u datoteci s pravima 600 u mapi 700 i predaje lozinku alatima preko datoteke, ne vrijednosti argumenta. Ne koristiti shell tracing. Lozinka se ne ispisuje. Kopija PKCS12 keystorea provjerava se bajt po bajt i otvaranjem pomoću keytool-a. Lozinku dodatno sačuvati u menadžeru lozinki ili na zasebnom sigurnom mediju; rezervna kopija keystorea sama nije dovoljna za oporavak. Skripta ne kopira lozinku uz backup ključa.
-
-Potpisivanje provjerava identitet certifikata, unaprijed zabilježeni SHA-256 certifikata, verziju 1.2 (3), poravnanje i svih pet lokalizacija. Izlaz su produkcijski APK, njegov checksum i javni izvještaj potpisa. Za produkcijsko testiranje koristiti poseban testni uređaj/profil. **Ne pokretati test-device.sh, adb install, uninstall niti bilo kakvu promjenu na Xiaomi 12 u okviru ovog izdanja.**
-
-Pripremljeni lokalni repozitorij je u ignorisanom izlaznom direktoriju `dist/github/Rez-Audio-Studio`. Nema remote-a ni objave. `dist/github/release-v1.2.json` je lokalni nacrt metapodataka; nije GitHub Release. Poslije provjere prava, potpisa, backupa i prikaza na testnom uređaju vlasnik odobrava konkretan APK i javnu objavu. Tek tada povezati remote i kreirati Release; ne pokretati upload tokom pripreme.
+Nikad keystore, lozinku, privatni ključ, razvojni/testni APK, .idsig, build direktorij ili lokalnu konfiguraciju. Provjeriti uploadovane bajtove dok je Release draft. Objaviti tek odobreni skup priloga. Ponovo anonimno preuzeti javni APK, potvrditi njegov SHA-256 i potpis naspram odobrenog lokalnog APK-a te provjeriti javne linkove. Zabilježiti rezultat i tek tada proglasiti izdanje završenim.

@@ -1,6 +1,6 @@
 # Lokalizacija i završna provjera 1.2 — 14.11.2026.
 
-Status: lokalni razvojni kandidat, nije odobren za javnu objavu.
+Status ovog historijskog pregleda: lokalni razvojni kandidat. Naknadna produkcijska provjera od 14.11.2026. opisana je ispod i u [FINAL-v1.2.md](FINAL-v1.2.md); ona zamjenjuje ranije zaključke o nedostupnom ADB-u, nepotvrđenim pravima i nepostojećem produkcijskom potpisu.
 
 ## Izmjene
 
@@ -53,3 +53,13 @@ Source arhiva 1.2 raspakovana je u novu privremenu mapu. Iz nje su bez postojeć
 Završni lokalni razvojni APK: `dist/Rez-1.2.apk`.
 SHA-256: `9607f68413d6bb1670def52cdc38fbf1007b6452c9ffa663e7d9a21c57777397`.
 Poravnanje potvrđeno zipalign provjerom. Nije javno izdanje niti produkcijski potpis.
+
+## Naknadna produkcijska provjera — 14.11.2026.
+
+Vlasnik je potvrdio pravo objave izvora, testova, skripti, XML resursa, ikone i screenshotova pod Apache-2.0. Raniji javni APK imao je validan projektni certifikat, ali vlasnik nije imao njegovu lozinku; postojeći Release je po nalogu vlasnika postavljen u draft. Stari ključ i backup su sačuvani.
+
+Novi trajni ključ kreiran je interaktivno pod novim nazivom i ima provjeren identičan backup na eksternom disku. Produkcijski APK ima SHA-256 `9922af6503b858da5cac39e395ddab8bdd42d14c05873aba875089299a805922`. Manifest, payload, zipalign, potpis i lokalizacije su verificirani. Ponovljeno je 124 Java i 54 FFmpeg provjera, uz lokalizacijske provjere.
+
+Na Xiaomi 12 / Android 15 instaliran je tačan novi produkcijski APK; izvučeni instalirani base.apk ima isti hash. Različiti raniji potpis zahtijevao je deinstalaciju, izvršenu uz posebno odobrenje vlasnika. Vođeni ručni test uvoza biračem, waveform-a, 400% zuma, pomjeranja, raspona, preview-a, WAV rezanja/čuvanja, otvaranja/zvuka i sistemskog izbora dijeljenja prošao je. Original i raniji izvozi ostali su nepromijenjeni; novi WAV sadrži identične originalne PCM uzorke za traženi raspon. Hashovi i relevantni dostupni logcat provjeravani su nakon svakog potvrđenog koraka. Nije izvršeno slanje datoteke.
+
+Pet početnih ekrana potvrđeno je na uređaju; svi prevedeni resursi i parametri provjereni su programski. Puni ručni audio tok potvrđen je na bosanskom. Android instrumentation, mali ekran/font matrica, ostali formati na telefonu i Gradle/lint nisu izvršeni. Nije mijenjan INJECT_EVENTS niti sigurnosne postavke telefona. Raniji rezultati razvojnog APK-a ne predstavljaju novi produkcijski test. Javna zamjena čeka završnu potvrdu; javni download novog APK-a zatim treba ponovo hashovati.

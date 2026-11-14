@@ -6,7 +6,7 @@ Rez Audio Studio is an Android application for trimming audio recordings and cre
 
 The application requires **Android 10 or later (API 29+)**. Version 1.2 uses application ID `rs.rez.audio`, version code `3`, and target SDK `35`.
 
-The repository and Release v1.2 are being prepared for review. A production APK has not yet been signed or approved for public distribution. See the [release status](docs/FINAL-v1.2.md).
+A production-signed v1.2 APK has passed the guided Xiaomi 12 workflow test. The existing GitHub Release is temporarily a draft while final publication approval is pending. See the [release status](docs/FINAL-v1.2.md) for the exact APK and certificate fingerprints.
 
 ## Features
 
@@ -49,11 +49,11 @@ Translations cover controls, dialogs, notifications, errors, and accessibility d
 
 ## Installation
 
-A public production APK is not yet available from this project. The planned release filename is `Rez-Audio-Studio-v1.2.apk`.
+The replacement production APK is `Rez-Audio-Studio-v1.2.apk` (103095 bytes). Its SHA-256 is `9922af6503b858da5cac39e395ddab8bdd42d14c05873aba875089299a805922`. The earlier public attachment has been withdrawn by making the Release a draft; the replacement is awaiting final publication approval.
 
-Once a release is approved, obtain the APK and its SHA-256 checksum from the project's GitHub Release, verify the download, and open it on an Android 10+ device. Android may require permission for the application used to install the APK.
+After publication, obtain the APK and its SHA-256 checksum from [Release v1.2](https://github.com/novipiksel-alt/Rez-Audio-Studio/releases/tag/v1.2), verify the download, and open it on an Android 10+ device. Android may require permission for the application used to install the APK.
 
-For local development, the build script produces `dist/Rez-1.2.apk`, signed with a development certificate. This is not the production release. An installation signed with a different certificate cannot be upgraded directly using the production APK. Do not replace an existing installation without considering its data and signing identity. The current release preparation does not change the Xiaomi 12 installation.
+For local development, the build script produces `dist/Rez-1.2.apk`, signed with a development certificate. This is not the production release. An installation signed with a different certificate cannot be upgraded directly using the production APK. Do not replace an existing installation without considering its data and signing identity. On Xiaomi 12, the existing installation could not be upgraded because its certificate differed. It was uninstalled with the owner's explicit approval, then the exact new production APK was installed and tested. Existing users of the old signing identity need to preserve their work before uninstalling; the new certificate cannot upgrade the old identity.
 
 ## Usage
 
@@ -111,9 +111,9 @@ python3 tests/verify_localization.py dist/Rez-1.2.apk
 
 Android instrumentation tests are available through `scripts/test-device.sh`. They require ADB and a dedicated Android 10+ test device. The script installs development and test APKs, so do not run it against an installation that must be preserved, including the Xiaomi 12 installation used during this preparation.
 
-**Tested on Xiaomi 12:** an earlier user-reported check on 14 November 2026 passed 7/7 basic workflow checks, covering loading, waveform display, zooming, scrolling, range selection, and export. This does not establish compatibility with every Android device or confirm the final production APK.
+**Tested on Xiaomi 12, Android 15 (14 November 2026):** the installed APK was pulled back through ADB and its SHA-256 matched the new production candidate. Guided manual testing passed file picker import, waveform, 400% zoom and horizontal panning, typed range selection, preview, trimming, saving, opening/playback and the system share chooser. The exported WAV contains the exact original PCM samples for the selected range; the original file and earlier exports remained unchanged. Nothing was sent through the share chooser.
 
-Instrumentation coverage includes five languages, regional variants, English fallback, and controls at 320 dp with font scales of 100%, 150%, and 200%. These device tests and the final visual review have not been executed in the current environment because ADB access is restricted. See the [v1.2 review](docs/REVIEW-1.2.md) for results and remaining checks.
+Instrumentation coverage includes five languages, regional variants, English fallback, and controls at 320 dp with font scales of 100%, 150%, and 200%. The instrumentation suite was not executed against the production APK: it requires a separately signed test APK with a matching certificate. ADB inspection and guided manual testing were used instead. All five home screens and compiled language resources were checked; the full audio workflow was tested in Bosnian. The small-screen/font-scale instrumentation matrix remains unexecuted. See the [v1.2 review](docs/REVIEW-1.2.md) for results and remaining checks.
 
 Prepare and scan the draft source package without publishing:
 
@@ -132,7 +132,7 @@ The YouTube shortcut sends an HTTPS YouTube link to the **separately installed [
 
 The project uses the **Apache License, Version 2.0**. See [LICENSE](LICENSE), [NOTICE](NOTICE), and [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
 
-Confirmation of the existing source and icon provenance remains an open release review item. Public distribution also requires production signing, device validation, and final release approval.
+The owner confirmed ownership or permission to publish the project code, tests, scripts, XML resources, vector icon and documentation screenshots under Apache-2.0 on 14 November 2026. This is an owner declaration, not independent proof of authorship. Final public replacement approval is pending.
 
 ## Developer
 
