@@ -34,6 +34,8 @@ Na Xiaomi 12 vlasnik je odabrao vođeni ručni test bez promjene sigurnosnih pos
 
 ## Odobrenje i postojeći GitHub Release
 
+Za v1.2 ova objava je završena: vlasnik je odobrio priloge, isti Release ponovo je javno objavljen i anonimno provjeren. Sljedeće upute opisuju obavezne korake postupka, a ne preostali posao ovog izdanja.
+
 Dokumentaciju uskladiti sa stvarnim rezultatima, commitovati i pushovati na main. Ne pomjerati objavljeni tag bez jasnog izvještaja i opravdanja; za ovaj kandidat postojeći v1.2 tag ima identične izvore aplikacije i build ulaze.
 
 Prije javne zamjene tražiti završnu potvrdu vlasnika za konkretni APK i SHA-256. Release do tada ostaje draft, sa sačuvanim starim assetom. Nakon potvrde ažurirati isti Release, zamijeniti stari APK i postaviti samo:

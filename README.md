@@ -6,7 +6,7 @@ Rez Audio Studio is an Android application for trimming audio recordings and cre
 
 The application requires **Android 10 or later (API 29+)**. Version 1.2 uses application ID `rs.rez.audio`, version code `3`, and target SDK `35`.
 
-A production-signed v1.2 APK has passed the guided Xiaomi 12 workflow test. The existing GitHub Release is temporarily a draft while final publication approval is pending. See the [release status](docs/FINAL-v1.2.md) for the exact APK and certificate fingerprints.
+The production-signed v1.2 APK is publicly available from [Release v1.2](https://github.com/novipiksel-alt/Rez-Audio-Studio/releases/tag/v1.2). It passed the guided Xiaomi 12 workflow test; the public download was independently retrieved without authentication and matched the approved APK. See the [release verification](docs/FINAL-v1.2.md) for fingerprints and test limits.
 
 ## Features
 
@@ -49,9 +49,9 @@ Translations cover controls, dialogs, notifications, errors, and accessibility d
 
 ## Installation
 
-The replacement production APK is `Rez-Audio-Studio-v1.2.apk` (103095 bytes). Its SHA-256 is `9922af6503b858da5cac39e395ddab8bdd42d14c05873aba875089299a805922`. The earlier public attachment has been withdrawn by making the Release a draft; the replacement is awaiting final publication approval.
+Download [Rez-Audio-Studio-v1.2.apk](https://github.com/novipiksel-alt/Rez-Audio-Studio/releases/download/v1.2/Rez-Audio-Studio-v1.2.apk) (103095 bytes) and its [SHA-256 checksum](https://github.com/novipiksel-alt/Rez-Audio-Studio/releases/download/v1.2/Rez-Audio-Studio-v1.2.apk.sha256). APK SHA-256: `9922af6503b858da5cac39e395ddab8bdd42d14c05873aba875089299a805922`. The previous attachment was withdrawn, then replaced with this verified APK after owner approval.
 
-After publication, obtain the APK and its SHA-256 checksum from [Release v1.2](https://github.com/novipiksel-alt/Rez-Audio-Studio/releases/tag/v1.2), verify the download, and open it on an Android 10+ device. Android may require permission for the application used to install the APK.
+Obtain the APK and its SHA-256 checksum from [Release v1.2](https://github.com/novipiksel-alt/Rez-Audio-Studio/releases/tag/v1.2), verify the download, and open it on an Android 10+ device. Android may require permission for the application used to install the APK.
 
 For local development, the build script produces `dist/Rez-1.2.apk`, signed with a development certificate. This is not the production release. An installation signed with a different certificate cannot be upgraded directly using the production APK. Do not replace an existing installation without considering its data and signing identity. On Xiaomi 12, the existing installation could not be upgraded because its certificate differed. It was uninstalled with the owner's explicit approval, then the exact new production APK was installed and tested. Existing users of the old signing identity need to preserve their work before uninstalling; the new certificate cannot upgrade the old identity.
 
@@ -132,7 +132,7 @@ The YouTube shortcut sends an HTTPS YouTube link to the **separately installed [
 
 The project uses the **Apache License, Version 2.0**. See [LICENSE](LICENSE), [NOTICE](NOTICE), and [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
 
-The owner confirmed ownership or permission to publish the project code, tests, scripts, XML resources, vector icon and documentation screenshots under Apache-2.0 on 14 November 2026. This is an owner declaration, not independent proof of authorship. Final public replacement approval is pending.
+The owner confirmed ownership or permission to publish the project code, tests, scripts, XML resources, vector icon and documentation screenshots under Apache-2.0 on 14 November 2026. This is an owner declaration, not independent proof of authorship. The owner approved the replacement production APK and public release; the public attachments were downloaded again and verified.
 
 ## Developer
 

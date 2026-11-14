@@ -16,4 +16,4 @@ Paket i lokalni Git indeks ne uključuju produkcijski ključ. Predviđena trajna
 
 ## Naknadno stanje produkcijskog kandidata — 14.11.2026.
 
-Prethodni odlomci opisuju raniju pripremu. Novi produkcijski ključ sada postoji izvan projekta, s nezavisnim identičnim backupom; vlasnik je lozinku postavio interaktivno. Produkcijski APK je potpisan i testiran na Xiaomi 12. Vlasnik je potvrdio prava objave; postojeći GitHub Release privremeno je draft. Aktuelne hash vrijednosti, provedene provjere, ograničenja i status javne objave su u FINAL-v1.2.md. Privatni ključevi i lozinke ostaju isključeni iz svih priloga.
+Prethodni odlomci opisuju raniju pripremu. Novi produkcijski ključ sada postoji izvan projekta, s nezavisnim identičnim backupom; vlasnik je lozinku postavio interaktivno. Produkcijski APK je potpisan i testiran na Xiaomi 12. Vlasnik je potvrdio prava objave; postojeći GitHub Release prvo je privremeno povučen u draft, a zatim uz završno odobrenje ponovo objavljen s verificiranim novim APK-om. Aktuelne hash vrijednosti, provedene provjere, ograničenja i status javne objave su u FINAL-v1.2.md. Privatni ključevi i lozinke ostaju isključeni iz svih priloga.

@@ -6,4 +6,4 @@
 - Testovi prevoda i formatnih parametara, petojezični testovi resursa i uskog rasporeda za Android.
 - Verzija 1.2, versionCode 3. Audio engine, kodeci i pravila Seal integracije nisu promijenjeni. Produkcijski kandidat koristi novi trajni certifikat, naveden u docs/FINAL-v1.2.md.
 
-Novi produkcijski APK testiran je na Xiaomi 12; postojeći Release ostaje draft do završne potvrde za zamjenu i javnu objavu. Detalji i ograničenja su u docs/FINAL-v1.2.md.
+Novi produkcijski APK testiran je na Xiaomi 12 i uz završnu potvrdu objavljen u postojećem Release-u v1.2. Javno preuzeti APK anonimno je ponovo hashovan i verificiran. Detalji i ograničenja su u docs/FINAL-v1.2.md.

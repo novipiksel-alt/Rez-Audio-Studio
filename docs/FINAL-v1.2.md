@@ -1,12 +1,12 @@
 # Završni status Rez Audio Studio v1.2
 
-Status 14.11.2026: novi produkcijski APK potpisan i testiran; postojeći GitHub Release je draft. Čeka završnu potvrdu vlasnika za zamjenu priloga i javnu objavu. Ponovno preuzimanje javnog zamjenskog APK-a još nije moguće; izdanje nije završeno.
+Status 14.11.2026: produkcijsko izdanje javno objavljeno uz završno odobrenje vlasnika. Isti postojeći GitHub Release v1.2 je ažuriran, a svih šest javnih priloga ponovo je anonimno preuzeto i verificirano. Produkcijski APK odgovara lokalno odobrenom i testiranom APK-u.
 
 ## Revizija ranijeg javnog APK-a
 
 Raniji asset Rez-Audio-Studio-v1.2.apk: 107191 bajt; SHA-256 `c8a78473de0f509735cf7e25880e2502dc1eab470829a1b009a680ea416e8956`. Potpis je validan, identitet CN=Rez Audio Studio, O=Rez Audio Studio, C=BA, RSA 3072; SHA-256 certifikata `d120740d28739d29e77dcb204de8466ea9fb92ef2020d2bf500b7e980a82796d`. Nije razvojni certifikat. Svih sedam payload datoteka identično je svježem unsigned buildu provjerenog izvora. Pregled arhive i skeniranje poznatih obrazaca nisu pronašli privatne ključeve, tokene, lokalne putanje ili razvojne datoteke.
 
-Vlasnik je naknadno potvrdio da ne zna lozinku tog ključa. Po njegovom izričitom nalogu postojeći Release prebačen je u draft. Tag, izvori i raniji asset nisu obrisani. Anonimni Release API i direktni APK link nakon skrivanja vratili su 404. Stari ključ i njegov backup nisu prepisani ili obrisani; lozinka nije pogađana.
+Vlasnik je naknadno potvrdio da ne zna lozinku tog ključa. Po njegovom izričitom nalogu postojeći Release prebačen je u draft. U trenutku skrivanja tag, izvori i raniji asset nisu obrisani. Prilikom odobrene završne objave samo raniji APK asset zamijenjen je novim produkcijskim APK-om. Anonimni Release API i direktni APK link nakon skrivanja vratili su 404. Stari ključ i njegov backup nisu prepisani ili obrisani; lozinka nije pogađana.
 
 ## Novi produkcijski kandidat
 
@@ -42,11 +42,21 @@ Vlasnik je u ovoj sesiji 14.11.2026. potvrdio pravo objave pod Apache-2.0 za pro
 
 Nisu izvršeni: Android instrumentation suite, matrica 320 dp i fontova 100/150/200%, Gradle/lint, provjera svih formata na telefonu ili nezavisna lektura prevoda. Testovi uređaja nisu zamijenjeni razvojnim APK-om. Nije mijenjan INJECT_EVENTS niti sigurnosne postavke telefona. Funkcije, dizajn i podržani formati aplikacije nisu mijenjani.
 
-## Preostalo za objavu
+## Završna objava i anonimna provjera
 
-1. Završna potvrda vlasnika za konkretni novi APK, checksum, certifikat i zamjenu postojećeg drafta.
-2. U postojeći Release postaviti isključivo novi APK, .sha256, javni izvještaj potpisa, LICENSE, NOTICE i THIRD_PARTY_NOTICES.md; nikad ključeve, lozinke ili build direktorije.
-3. Objaviti postojeći Release, ponovo anonimno preuzeti APK i provjeriti SHA-256, potpis i dostupnost linka. Tek tada proglasiti završetak i ažurirati ovaj status.
+Vlasnik je izričito odobrio zamjenu starog APK-a i ponovnu javnu objavu. Prvo je u istom draftu zamijenjen APK i dodan checksum, javni izvještaj potpisa, LICENSE, NOTICE i THIRD_PARTY_NOTICES.md. Svih šest uploadovanih priloga preuzeto je i upoređeno s lokalnim bajtovima dok je Release još bio draft. Zatim je objavljen isti Release, bez duplikata: ID `RE_kwDOVtwRv84ahNsl`.
+
+Objavljeno 14.11.2026. u 02:55:34 UTC. Završna anonimna provjera završena u 02:56:02 UTC, bez GitHub tokena, autentifikacije ili kolačića:
+
+- Javna Release stranica: HTTP 200.
+- Direktni APK download: HTTP 200, 103095 bajt.
+- SHA-256 javno preuzetog APK-a: `9922af6503b858da5cac39e395ddab8bdd42d14c05873aba875089299a805922`; identičan lokalnom odobrenom APK-u i instaliranom APK-u s Xiaomi 12.
+- Apksigner: validan potpis; tačan DN `CN=Rez Audio Studio, O=Rez Audio Studio, C=BA`; SHA-256 certifikata `8cfed1510ed9d1de649b04c8bc9d9f7347026a4db1ad5e8fe4364d370f8b7a70`.
+- Zipalign javno preuzetog APK-a PASS. Svih šest javno preuzetih priloga identično je lokalnim odobrenim datotekama.
+- Release opis izričito navodi prolazak 124 Java, 54 FFmpeg i lokalizacijskih provjera te ručnog osnovnog testa na Xiaomi 12, uz neizvršene Gradle/lint i kompletne instrumentation testove.
+- Nisu objavljeni keystore, lozinka, privatni ključ, razvojni/testni APK, .idsig ili build direktoriji.
+
+Dokumentacija nakon provjere commitovana je i pushovana na main; objavljeni tag ostao je nepromijenjen. Potpuni SHA dokumentacijskog commita nalazi se u Git historiji i Release opisu.
 
 Release: https://github.com/novipiksel-alt/Rez-Audio-Studio/releases/tag/v1.2
-Direktni APK nakon odobrene objave: https://github.com/novipiksel-alt/Rez-Audio-Studio/releases/download/v1.2/Rez-Audio-Studio-v1.2.apk
+Direktni APK: https://github.com/novipiksel-alt/Rez-Audio-Studio/releases/download/v1.2/Rez-Audio-Studio-v1.2.apk
