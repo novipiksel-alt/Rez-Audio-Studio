@@ -1,0 +1,6 @@
+<!-- SPDX-License-Identifier: Apache-2.0 -->
+<resources>
+    <item type="id" name="range_start"/>
+    <item type="id" name="range_end"/>
+    <item type="id" name="selection"/>
+</resources>

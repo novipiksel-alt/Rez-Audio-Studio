@@ -1,0 +1,6 @@
+<!-- SPDX-License-Identifier: Apache-2.0 -->
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="rs.rez.audio.tests" android:versionCode="1" android:versionName="1.0">
+    <uses-sdk android:minSdkVersion="29" android:targetSdkVersion="35" />
+    <application android:label="Rez platform tests" android:debuggable="true" />
+    <instrumentation android:name="rs.rez.audio.PlatformTests" android:targetPackage="rs.rez.audio" android:label="Rez platform tests" />
+</manifest>

@@ -1,0 +1,18 @@
+// SPDX-License-Identifier: Apache-2.0
+plugins { id 'com.android.application' }
+android {
+    namespace 'rs.rez.audio'
+    sourceSets.main.assets.srcDir layout.buildDirectory.dir('generated/legalAssets')
+    compileSdk 36
+    defaultConfig { applicationId 'rs.rez.audio'; minSdk 29; targetSdk 35; versionCode 3; versionName '1.2' }
+    compileOptions { sourceCompatibility JavaVersion.VERSION_1_8; targetCompatibility JavaVersion.VERSION_1_8 }
+}
+
+// Keep licensing material in release APKs without changing the application UI.
+def prepareLegalAssets = tasks.register('prepareLegalAssets', Sync) {
+    from(rootProject.projectDir) {
+        include 'LICENSE', 'NOTICE', 'THIRD_PARTY_NOTICES.md'
+    }
+    into layout.buildDirectory.dir('generated/legalAssets')
+}
+tasks.named('preBuild').configure { dependsOn prepareLegalAssets }

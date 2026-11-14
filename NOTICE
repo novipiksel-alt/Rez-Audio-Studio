@@ -1,0 +1,11 @@
+Rez Audio Studio 1.2
+
+The original project source code, build/test scripts and project resources
+are offered under the Apache License, Version 2.0. See LICENSE.
+
+Third-party tools and separately installed applications retain their own
+licenses. See THIRD_PARTY_NOTICES.md for the dependency inventory and scope.
+
+This notice does not identify or claim ownership on behalf of an unverified
+copyright holder. Copyright holder identity and source provenance remain
+release review items documented in docs/REVIEW-1.1.md.

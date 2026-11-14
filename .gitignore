@@ -1,0 +1,42 @@
+# Build outputs and private signing material
+/build/
+/app/build/
+/.gradle/
+/local.properties
+*.keystore
+*.jks
+*.p12
+*.pfx
+*.idsig
+/dist/
+/.idea/
+*.iml
+.env
+.env.*
+
+# Local credentials and generated test output
+*.pem
+*.key
+/signing.properties
+/keystore.properties
+/tests/fixtures/cut-*
+/tests/fixtures/full-*
+/tests/fixtures/tiny-*
+/tests/fixtures/bad.bin
+/tests/fixtures/truncated.*
+/tests/fixtures/ape-id3v1.mp3
+/tests/fixtures/id3-footer.mp3
+
+# All audio fixtures are generated locally; exclude unverified existing binaries
+/tests/fixtures/
+
+# Production credential files
+*password*.txt
+*password*.json
+*.pass
+*.passwd
+*.secret
+
+# Python cache
+__pycache__/
+*.pyc
