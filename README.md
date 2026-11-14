@@ -31,6 +31,16 @@ Supported formats and output behavior:
 
 FLAC and ALAC are not supported for trimming in this version. Platform-based playback and remuxing depend on the device's media support. Compressed audio cuts follow frame or packet boundaries, so the actual range can differ slightly from the selection. MP3 frame dependencies may cause a brief transition at the start. WAV cuts follow sample boundaries. Import is limited to 2 GB and available cache storage; WAV export is subject to the format's 4 GB limit. Encrypted audio is not supported.
 
+## Screenshots
+
+**Home screen** — Open an audio file or access the shortcut to the separate Seal app.
+
+<img src="docs/screenshots/rez-home.jpg" alt="Rez Audio Studio home screen in English" width="300">
+
+**Audio editor** — Adjust the selection, preview audio, and trim without re-encoding.
+
+<img src="docs/screenshots/rez-editor.jpg" alt="Rez Audio Studio audio editor with time selection and preview controls" width="300">
+
 ## Supported Languages
 
 The interface supports **English, Bosnian, German, Italian, and Spanish**. Android selects the language automatically from the system configuration. English is the default fallback; there is no separate in-app language selector.
