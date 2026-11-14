@@ -1,59 +1,131 @@
-# Rez Audio Studio 1.2 — Android
+# Rez Audio Studio v1.2
 
-Rez je jednostavna Android aplikacija za izrezivanje audio snimaka i izradu zvona. Podržava Android 10+ (API 29+). Audio se obrađuje lokalno na telefonu, bez naloga i bez reklama.
+## Overview
 
-## Mogućnosti
+Rez Audio Studio is an Android application for trimming audio recordings and creating ringtones. Audio is processed locally on the device, without an account or advertisements.
 
-- Uvoz audio datoteka iz Android birača ili dijeljenjem iz druge aplikacije.
-- Prikaz talasnog oblika, zumiranje dugmadima i s dva prsta, horizontalno pomjeranje.
-- Izbor početka i kraja, preslušavanje označenog dijela.
-- Izrezivanje bez ponovnog kodiranja za podržane formate. Rez kod komprimovanih formata zavisi od granica frejmova.
-- Spremanje isječaka u `Music/Rez` ili `Ringtones/Rez` i opcionalno postavljanje zvona.
-- YouTube → audio prečica otvara **zasebno instaliranu** aplikaciju [Seal](https://github.com/JunkFood02/Seal). Seal nije uključen u Rez i preuzimanje zavisi od pravila servisa i prava na sadržaj.
+The application requires **Android 10 or later (API 29+)**. Version 1.2 uses application ID `rs.rez.audio`, version code `3`, and target SDK `35`.
 
-## Izgradnja (CachyOS / Linux)
+The repository and Release v1.2 are being prepared for review. A production APK has not yet been signed or approved for public distribution. See the [release status](docs/FINAL-v1.2.md).
 
-Potrebni su JDK 17, Android SDK platforme 36 i Build Tools 36.0.0.
+## Features
+
+- Import audio through the Android file picker or sharing from another application.
+- View the waveform, zoom with buttons or a pinch gesture, and scroll horizontally.
+- Select a time range using the handles or time fields, then preview the selection.
+- Trim supported audio without re-encoding.
+- Save clips to `Music/Rez` or `Ringtones/Rez`.
+- Open, share, or rename saved clips, and optionally set a clip as the ringtone.
+- Open the separately installed Seal application through a YouTube link shortcut.
+
+Supported formats and output behavior:
+
+| Audio format | Export behavior |
+| --- | --- |
+| MP3 | Copies compressed frames to an MP3 file. |
+| PCM and floating-point WAV | Copies audio samples to a WAV file. Compressed WAV is not supported. |
+| ADTS AAC | Copies compressed frames to an AAC file. |
+| AAC in M4A | Uses Android media APIs to remux into M4A. |
+| AMR-NB and AMR-WB | Uses Android media APIs to remux into 3GP. |
+| Opus and Vorbis | Uses Android media APIs to remux into WebM. |
+
+FLAC and ALAC are not supported for trimming in this version. Platform-based playback and remuxing depend on the device's media support. Compressed audio cuts follow frame or packet boundaries, so the actual range can differ slightly from the selection. MP3 frame dependencies may cause a brief transition at the start. WAV cuts follow sample boundaries. Import is limited to 2 GB and available cache storage; WAV export is subject to the format's 4 GB limit. Encrypted audio is not supported.
+
+## Supported Languages
+
+The interface supports **English, Bosnian, German, Italian, and Spanish**. Android selects the language automatically from the system configuration. English is the default fallback; there is no separate in-app language selector.
+
+Translations cover controls, dialogs, notifications, errors, and accessibility descriptions. Resources are stored in `app/src/main/res/values/strings.xml` and the `values-bs`, `values-de`, `values-it`, and `values-es` directories. Time fields retain the `mm:ss.SSS` format and also accept a decimal comma.
+
+## Installation
+
+A public production APK is not yet available from this project. The planned release filename is `Rez-Audio-Studio-v1.2.apk`.
+
+Once a release is approved, obtain the APK and its SHA-256 checksum from the project's GitHub Release, verify the download, and open it on an Android 10+ device. Android may require permission for the application used to install the APK.
+
+For local development, the build script produces `dist/Rez-1.2.apk`, signed with a development certificate. This is not the production release. An installation signed with a different certificate cannot be upgraded directly using the production APK. Do not replace an existing installation without considering its data and signing identity. The current release preparation does not change the Xiaomi 12 installation.
+
+## Usage
+
+1. Open an audio file through the file picker, or share an audio file to Rez.
+2. Zoom or scroll the waveform and choose the start and end points. You can also enter the times directly.
+3. Preview the selection, then trim it.
+4. Choose a clip name and save. The original file remains unchanged.
+5. Open, share, or rename the saved clip, or set it as a ringtone.
+
+Setting a ringtone may require Android's permission to modify system settings. If permission is denied, the saved clip remains available and the ringtone is not changed.
+
+## Building from Source
+
+The documented manual build targets Linux and requires:
+
+- JDK 17.
+- Android SDK Platform 36 and Build Tools 36.0.0.
+- Bash, Python 3, `zip`, and `ripgrep` for the build and preparation scripts.
+- FFmpeg and ffprobe for test fixtures and independent audio checks.
+
+Set `ANDROID_SDK_ROOT` to your SDK installation, then run:
 
 ```bash
-ANDROID_SDK_ROOT=/opt/android-sdk ./scripts/build.sh
+./scripts/build.sh
 ```
 
-Skripta kreira lokalni razvojni ključ u `build/manual/debug.keystore` ako ne postoji i izlazni APK `dist/Rez-1.2.apk`. **Razvojni ključ nikada ne slati na GitHub.** Za javnu distribuciju pripremiti poseban produkcijski ključ, sačuvati ga van repozitorija i izgraditi/potpisati izdanje odgovarajućim postupkom.
+The script creates a local development key at `build/manual/debug.keystore` if needed and writes `dist/Rez-1.2.apk`. Never include this key in Git or release attachments.
 
-## Testiranje
+To build without generating or using a signing key:
+
+```bash
+./scripts/build.sh --unsigned
+```
+
+The unsigned output is `dist/Rez-1.2-unsigned.apk`. Gradle configuration is provided, but the manual build is the validated path; a Gradle wrapper is not included, and Gradle/lint validation remains outstanding.
+
+Production signing uses a separate key outside the repository. The required certificate identity is `CN=Rez Audio Studio, O=Rez Audio Studio, C=BA`. Follow the [release procedure](docs/RELEASE-PROCESS.md) for key storage, backup, signing, certificate verification, and final approval. Private keys and passwords must never be included in the repository or release package.
+
+## Testing
+
+Run the local test suite:
 
 ```bash
 ./scripts/test.sh
 ```
 
-Dana 14.11.2026. korisnički test na Xiaomi 12 potvrdio je 7/7 osnovnih funkcija (učitavanje, prikaz, zumiranje, pomjeranje, izbor raspona, izvoz). To nije automatska potvrda kompatibilnosti sa svim Android uređajima.
+The recorded results are **124 Java assertions** and **54 independent FFmpeg checks**, plus localization checks. Audio checks cover decoding, timing, format preservation, and unchanged packet or PCM content. Synthetic test audio is generated locally; binary fixtures are excluded from the source package.
 
-## Distribucija i licenciranje
+Check translation catalogs and the languages embedded in a built APK:
 
-Projekt koristi **Apache License 2.0**; puni tekst je u [LICENSE](LICENSE). Napomene o alatima i odvojenim aplikacijama su u [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md). Provjera autorskog porijekla i potvrda završnog izdanja još su otvorene.
-APK za javnu distribuciju treba potpisati zasebnim produkcijskim ključem. Dosad korišteni razvojni APK nije javno izdanje.
+```bash
+python3 tests/verify_localization.py
+python3 tests/verify_localization.py dist/Rez-1.2.apk
+```
 
-## Priprema javnog izdanja
+Android instrumentation tests are available through `scripts/test-device.sh`. They require ADB and a dedicated Android 10+ test device. The script installs development and test APKs, so do not run it against an installation that must be preserved, including the Xiaomi 12 installation used during this preparation.
 
-Repozitorij za objavu: **Rez-Audio-Studio**. Produkcijski postupak i obavezne provjere su u [docs/RELEASE-PROCESS.md](docs/RELEASE-PROCESS.md), a rezultati pregleda i otvorene stavke u [docs/REVIEW-1.1.md](docs/REVIEW-1.1.md).
+**Tested on Xiaomi 12:** an earlier user-reported check on 14 November 2026 passed 7/7 basic workflow checks, covering loading, waveform display, zooming, scrolling, range selection, and export. This does not establish compatibility with every Android device or confirm the final production APK.
 
-`./scripts/build.sh --unsigned` gradi bez kreiranja razvojnog ključa. `./scripts/sign-release.sh` koristi zaseban vanjski ključ i provjerava njegov unaprijed poznati certifikat. `./scripts/package-source.sh` priprema nacrt arhive izvora bez ključeva, APK-ova i binarnih testnih datoteka. Testni zvukovi se generišu lokalno; za testove su potrebni FFmpeg/ffprobe, Python 3 i JDK 17.
+Instrumentation coverage includes five languages, regional variants, English fallback, and controls at 320 dp with font scales of 100%, 150%, and 200%. These device tests and the final visual review have not been executed in the current environment because ADB access is restricted. See the [v1.2 review](docs/REVIEW-1.2.md) for results and remaining checks.
 
-Javna objava čeka potvrdu autorskog porijekla, provjeru produkcijskog APK-a na uređaju i izričitu potvrdu završnog izdanja.
+Prepare and scan the draft source package without publishing:
 
-## Jezici (1.2)
+```bash
+./scripts/package-source.sh
+python3 scripts/verify-package-security.py dist/Rez-Audio-Studio-1.2-source-DRAFT.zip
+```
 
-Interfejs podržava engleski (podrazumijevani), bosanski, njemački, italijanski i španski. Android automatski bira resurse prema sistemskim jezicima; za nepodržane jezike koristi se engleski. Nema zasebnog birača jezika u aplikaciji.
+## Seal Integration
 
-Prevodi su u `app/src/main/res/values/strings.xml`, `values-bs`, `values-de`, `values-it` i `values-es`. Prevedeni su dijalozi, statusi, dugmad, greške i opisi za čitače ekrana. Vremenski unos i zapis zadržavaju isti format `mm:ss.SSS` (prihvaća se i decimalni zarez). Audio engine i pravila Seal integracije ostaju isti.
+The YouTube shortcut sends an HTTPS YouTube link to the **separately installed [Seal application](https://github.com/JunkFood02/Seal)**. Downloading takes place in Seal; return to Rez afterward and open the downloaded audio file.
 
-Provjere kataloga: `python3 tests/verify_localization.py`; provjere ugrađenih prevoda: `python3 tests/verify_localization.py dist/Rez-1.2.apk`. Testovi uređaja koriste ID-jeve umjesto prevedenih oznaka i uključuju pet jezika, regionalne varijante, engleski fallback te kontrole na 320 dp uz font 100%, 150% i 200%.
+**Seal is not included in the APK.** Rez does not bundle Seal's code, resources, or downloader. Download availability depends on Seal and the service involved. Only download content you have permission to use. Seal retains its own license; see [third-party notices](THIRD_PARTY_NOTICES.md).
 
-Razvojni APK `dist/Rez-1.2.apk` nije javno izdanje. Rezultati i obavezna vizuelna provjera: [docs/REVIEW-1.2.md](docs/REVIEW-1.2.md).
+## License
 
-## Konačni kandidat za GitHub v1.2
+The project uses the **Apache License, Version 2.0**. See [LICENSE](LICENSE), [NOTICE](NOTICE), and [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
 
-Naziv produkcijskog priloga je `Rez-Audio-Studio-v1.2.apk`. Njegov certifikat mora imati identitet `CN=Rez Audio Studio, O=Rez Audio Studio, C=BA`; razvojni APK nije zamjena za ovaj prilog. Produkcijski ključ i lozinka nisu dio izvora niti release paketa.
+Confirmation of the existing source and icon provenance remains an open release review item. Public distribution also requires production signing, device validation, and final release approval.
 
-[Postupak izdanja](docs/RELEASE-PROCESS.md) opisuje sigurnu lokalnu pripremu ključa, rezervnu kopiju i provjere. [Završni status](docs/FINAL-v1.2.md) razlikuje izvršene provjere od preostalih. Priprema i testiranje ne instaliraju ništa na Xiaomi 12. Repo i Release ostaju neobjavljeni do završne provjere.
+## Developer
+
+**Developer:** Sn1p3r
+
+This developer credit appears in documentation only. The production signing certificate uses the project identity specified above, without a developer alias or personal information.
